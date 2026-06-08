@@ -80,6 +80,7 @@ Claude-style subagents are a separate integration model and are not represented 
    - `npx vibepresto pages set-vibepresto --site <site> --page-id <id> --inactive --json`
    - to switch to an existing bundle version, add `--bundle-version-id <id>`
    - to control plugin hook compatibility for that page, add `--plugin-hooks-mode inherit|enabled|disabled`
+   - plugin hook compatibility includes plugin-owned hook markup, scripts, and styles; WordPress CSS is demoted below bundle CSS with cascade layers
 9. When the user wants a single post permalink takeover:
    - for one specific post: `npx vibepresto upload --site <site> --site-dir <dir> --post-id <id> --json`
    - for the fallback template used across single posts: `npx vibepresto posts set-default-template --site <site> --lineage-id <id> --json`
