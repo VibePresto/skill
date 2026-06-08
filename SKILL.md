@@ -12,6 +12,7 @@ Use this skill when the task is to deploy a local static site or static-exported
 - Device-style CLI login
 - Session inspection with `whoami`
 - Page listing, search, creation, status changes, Front page assignment, and Posts page assignment
+- Page-level VibePresto activation, selected bundle version changes, and plugin hook compatibility mode
 - Post listing, search, status changes, direct bundle assignment, and default single-post template assignment
 - Framework-aware `detect`, `build`, `verify`, and `routes inspect`
 - Auto-bundling a local static site folder
@@ -74,10 +75,15 @@ Claude-style subagents are a separate integration model and are not represented 
 7. When the user wants a static template for the WordPress blog index, use:
    - `npx vibepresto pages set-posts-page --site <site> --page-id <id> --json`
    - this targets the WordPress `Posts page` from Reading Settings, not every individual single post view
-8. When the user wants a single post permalink takeover:
+8. When the user wants to pause or resume a VibePresto takeover while preserving the selected bundle, use:
+   - `npx vibepresto pages set-vibepresto --site <site> --page-id <id> --active --json`
+   - `npx vibepresto pages set-vibepresto --site <site> --page-id <id> --inactive --json`
+   - to switch to an existing bundle version, add `--bundle-version-id <id>`
+   - to control plugin hook compatibility for that page, add `--plugin-hooks-mode inherit|enabled|disabled`
+9. When the user wants a single post permalink takeover:
    - for one specific post: `npx vibepresto upload --site <site> --site-dir <dir> --post-id <id> --json`
    - for the fallback template used across single posts: `npx vibepresto posts set-default-template --site <site> --lineage-id <id> --json`
-9. Prefer `--json` whenever the result needs to be parsed or used by another tool step.
+10. Prefer `--json` whenever the result needs to be parsed or used by another tool step.
 
 ## Upload and deploy modes
 
