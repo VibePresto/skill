@@ -1,4 +1,4 @@
 interface:
   display_name: "VibePresto"
-  short_description: "Manage pages, bundle versions, and static site deploys with the CLI"
-  default_prompt: "Use $vibepresto to create or manage pages, inspect or roll back bundle versions, and bundle and deploy a static HTML/CSS/JS site to a VibePresto WordPress instance with the published `npx vibepresto` CLI."
+  short_description: "Upload single-page bundles to WordPress"
+  default_prompt: "Use $vibepresto with the config-backed `npx vibepresto` CLI to build, verify, and upload one static page bundle to a VibePresto WordPress page."
