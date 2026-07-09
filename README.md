@@ -1,6 +1,6 @@
 # VibePresto Skill
 
-Codex skill for deploying single-page static bundles and framework-exported static builds to a VibePresto-enabled WordPress site.
+Codex skill for uploading single-page static bundles and framework-exported static page builds to a VibePresto-enabled WordPress site.
 
 ## Install
 
@@ -13,8 +13,8 @@ npx skills add vibepresto/skill
 - prefers the published VibePresto CLI
 - checks authentication before upload or deploy
 - checks plugin-declared compatibility metadata and can suggest a skill upgrade
-- uses framework-aware `detect`, `build`, `verify`, and `routes inspect` flows
-- supports route-manifest and multi-page deployments
+- uses framework-aware `detect`, `build`, and `verify` flows before upload
+- treats route-manifest and multi-page deployments as advanced compatibility features
 - can use optional project-local defaults from `.vibepresto/config.json`
 - uses workspace-local auth from `.vibepresto/auth.json`
 - supports `--entry-html` when the main HTML file is not root `index.html`
@@ -28,9 +28,11 @@ npx skills add vibepresto/skill
 ```bash
 npx vibepresto whoami --site https://your-site.example --json
 npx vibepresto build --project-dir ./my-app --json
-npx vibepresto routes inspect --output-dir ./my-app/dist --json
-npx vibepresto deploy --site https://your-site.example --output-dir ./my-app/dist --create-missing-pages --json
+npx vibepresto verify --output-dir ./my-app/dist --json
+npx vibepresto upload --site https://your-site.example --site-dir ./my-app/dist --page-id 123 --json
 ```
+
+Default MVP model: **one WordPress page = one bundle lineage = one assignment**. For Home/About/Terms work, the skill should create or select each WordPress page and upload a separate page bundle for each one. Use route-aware `deploy` only when the user explicitly asks for one bundle mapped across multiple routes or when maintaining an existing multi-route deployment.
 
 The canonical machine-readable version for the skill lives in [`skill.json`](./skill.json).
 
@@ -42,7 +44,7 @@ If the project already has `.vibepresto/config.json`, the skill should prefer it
 - `projectDir` and `outputDir`
 - `defaults.entryHtml`
 - `uploadTarget`
-- `deployment.targets[]`
+- `deployment.targets[]` for advanced route-aware deployments
 - `singlePostTemplate.lineageId`
 
 When deploying assets outside the logged-in workspace, pass `--workspace-dir <workspace>` so the CLI reads the intended config and auth files.
@@ -53,7 +55,7 @@ For a simple static page upload, the skill can still use:
 npx vibepresto upload --site https://your-site.example --site-dir ./landing-page --page-id 123 --json
 ```
 
-This assigns the bundle only; it does not change WordPress Reading Settings. Use `pages set-homepage` or route-aware `deploy` when the homepage should change.
+This assigns the bundle only; it does not change WordPress Reading Settings. Use `pages set-homepage` only when the homepage should intentionally change.
 
 For nested entries:
 
