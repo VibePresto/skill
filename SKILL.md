@@ -30,6 +30,7 @@ If the CLI repo is checked out locally for development, `node ./bin/vibepresto.j
 
 2. **Choose a deployment path**
    - Plain static folder with `index.html` at root → use `upload --site-dir`
+   - Plain static folder or dist folder with a nested entry → add `--entry-html <relative-html>`
    - Framework project or prebuilt dist folder → use `detect`/`build`/`verify`, then `routes inspect`, then `deploy`
 
 3. **Framework or static-export projects**
@@ -37,7 +38,8 @@ If the CLI repo is checked out locally for development, `node ./bin/vibepresto.j
    - `npx vibepresto build --project-dir <dir> --json` (or `verify --output-dir <dir>` if already built)
    - `npx vibepresto routes inspect --output-dir <dir> --json`
    - Check `placeholder_count`, `placeholders`, and `warnings` when the HTML uses `data-vp-*` attributes
-   - If `.vibepresto/config.json` exists, prefer its saved `site`, `projectDir`, `outputDir`, `uploadTarget`, `deployment.targets[]`, and `singlePostTemplate.lineageId` defaults unless the user overrides them
+   - If `.vibepresto/config.json` exists, prefer its saved `site`, `projectDir`, `outputDir`, `defaults.entryHtml`, `uploadTarget`, `deployment.targets[]`, and `singlePostTemplate.lineageId` defaults unless the user overrides them
+   - Auth sessions live in workspace-local `.vibepresto/auth.json`; when assets are outside the logged-in workspace, pass `--workspace-dir <workspace>`
 
 4. **Dry run before first deployment on an unfamiliar project**
    - `npx vibepresto deploy --site <site> --output-dir <dir> --dry-run --json`
@@ -85,6 +87,18 @@ npx vibepresto upload \
 
 - CLI validates local references and `data-vp-*` placeholders before uploading.
 - If `.vibepresto/config.json` defines `uploadTarget`, `--page-id`/`--post-id` can be omitted.
+- `upload --page-id` assigns the bundle to that page but does not change the WordPress homepage. Use `pages set-homepage` or route-aware `deploy` for homepage changes.
+
+For a non-root entry:
+
+```bash
+npx vibepresto upload \
+  --site <site> \
+  --site-dir ./dist \
+  --entry-html nested/app.html \
+  --page-id 2 \
+  --json
+```
 
 **Framework/static-export deploy** (`deploy`) — React, Next, Nuxt, Vite, Svelte, TanStack, or any app producing static output:
 

@@ -16,6 +16,8 @@ npx skills add vibepresto/skill
 - uses framework-aware `detect`, `build`, `verify`, and `routes inspect` flows
 - supports route-manifest and multi-page deployments
 - can use optional project-local defaults from `.vibepresto/config.json`
+- uses workspace-local auth from `.vibepresto/auth.json`
+- supports `--entry-html` when the main HTML file is not root `index.html`
 - can mark a page as the WordPress Front page or Posts page through the CLI
 - can assign bundles to single posts and set a default single-post template lineage
 - validates WordPress `data-vp-*` placeholders in uploaded HTML
@@ -38,14 +40,25 @@ If the project already has `.vibepresto/config.json`, the skill should prefer it
 
 - `site`
 - `projectDir` and `outputDir`
+- `defaults.entryHtml`
 - `uploadTarget`
 - `deployment.targets[]`
 - `singlePostTemplate.lineageId`
+
+When deploying assets outside the logged-in workspace, pass `--workspace-dir <workspace>` so the CLI reads the intended config and auth files.
 
 For a simple static page upload, the skill can still use:
 
 ```bash
 npx vibepresto upload --site https://your-site.example --site-dir ./landing-page --page-id 123 --json
+```
+
+This assigns the bundle only; it does not change WordPress Reading Settings. Use `pages set-homepage` or route-aware `deploy` when the homepage should change.
+
+For nested entries:
+
+```bash
+npx vibepresto upload --site https://your-site.example --site-dir ./dist --entry-html nested/app.html --page-id 123 --json
 ```
 
 For a single post, the skill can also use:
